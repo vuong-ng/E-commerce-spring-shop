@@ -40,7 +40,6 @@ public class OrderService implements IOrderService {
         order.setOrderItems(new HashSet<>(orderItemList));
         order.setTotalAmount(calculateTotalAmount(orderItemList));
         return order;
-
     }
     
     private Order createOrder(Cart cart) {

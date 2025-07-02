@@ -26,7 +26,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name="orders")
+@Table(name=" orders")
 public class Order {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
