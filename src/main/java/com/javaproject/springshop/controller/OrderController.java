@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.javaproject.springshop.dto.OrderDto;
 import com.javaproject.springshop.exceptions.ResourceNotFoundException;
+import com.javaproject.springshop.model.Order;
 import com.javaproject.springshop.response.ApiResponse;
 import com.javaproject.springshop.service.order.IOrderService;
 
-import jakarta.persistence.criteria.Order;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -29,8 +29,9 @@ public class OrderController {
     @PostMapping("/order")
     public ResponseEntity<ApiResponse> createOrder(@RequestParam Long userId) {
         try {
-            Order order = (Order) orderService.placeOrder(userId);
-            return ResponseEntity.ok(new ApiResponse("Item order success", order));
+            Order order = orderService.placeOrder(userId);
+            OrderDto oderDto = orderService.convertToDto(order);
+            return ResponseEntity.ok(new ApiResponse("Item order success", oderDto));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse("Error occur whle creating order", e.getMessage()));

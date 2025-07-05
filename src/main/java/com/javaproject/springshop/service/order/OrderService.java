@@ -39,7 +39,9 @@ public class OrderService implements IOrderService {
         List<OrderItem> orderItemList = CreateOrderItems(order, cart);
         order.setOrderItems(new HashSet<>(orderItemList));
         order.setTotalAmount(calculateTotalAmount(orderItemList));
-        return order;
+        Order savedOrder = orderRepository.save(order);
+        cartService.clearCart(cart.getId());
+        return savedOrder;
     }
     
     private Order createOrder(Cart cart) {
@@ -74,8 +76,8 @@ public class OrderService implements IOrderService {
         List<Order> orders = orderRepository.findByUserId(userId);
         return orders.stream().map(this :: convertToDto).toList();
     }
-
-    private OrderDto convertToDto(Order order) {
+    @Override
+    public OrderDto convertToDto(Order order) {
         return modelMapper.map(order, OrderDto.class);
     }
 

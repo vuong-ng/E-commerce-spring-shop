@@ -1,12 +1,14 @@
 package com.javaproject.springshop.service.cart;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Service;
 
 import com.javaproject.springshop.exceptions.ResourceNotFoundException;
 import com.javaproject.springshop.model.Cart;
+import com.javaproject.springshop.model.User;
 import com.javaproject.springshop.repository.CartItemRepository;
 import com.javaproject.springshop.repository.CartRepository;
 
@@ -48,11 +50,15 @@ public class CartService implements ICartService {
     }
 
     @Override
-    public Long initializeNewCart() {
-        Cart newCart = new Cart();
-        Long newCartId = cartIdGenerator.incrementAndGet();
-        newCart.setId(newCartId);
-        return cartRepository.save(newCart).getId();
+    public Cart initializeNewCart(User user) {
+        return Optional.ofNullable(getCartByUserId(user.getId())).orElseGet(() -> {
+            Cart cart = new Cart();
+            cart.setUser(user);
+            // Long newCartId = cartIdGenerator.incrementAndGet();
+            // cart.setId(newCartId);
+            System.out.println(cart.getId());
+            return cartRepository.save(cart) ;
+        });
     }
 
     @Override

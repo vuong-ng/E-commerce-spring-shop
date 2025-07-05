@@ -1,6 +1,8 @@
 package com.javaproject.springshop.controller;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,9 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.javaproject.springshop.model.Cart;
+import com.javaproject.springshop.model.User;
 import com.javaproject.springshop.response.ApiResponse;
 import com.javaproject.springshop.service.cart.ICartItemService;
 import com.javaproject.springshop.service.cart.ICartService;
+import com.javaproject.springshop.service.user.IUserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,15 +26,17 @@ import lombok.RequiredArgsConstructor;
 public class CartItemController {
     private final ICartItemService cartItemService;
     private final ICartService cartService;
+    private final IUserService userService;
 
     @PostMapping("/item/add")
-    public ResponseEntity<ApiResponse> addItem(@RequestParam(required = false) Long cartId,
+    public ResponseEntity<ApiResponse> addItem(
             @RequestParam Long productId, @RequestParam Integer quantity) {
         try {
-            if (cartId == null) {
-                cartId = cartService.initializeNewCart();
-            }
-            cartItemService.addItemToCart(cartId, productId, quantity);
+            User user = userService.getUserById(4L);
+            Cart cart = cartService.initializeNewCart(user);
+            System.out.println(cart.getId() + " " + cart.getUser().getId());
+
+            cartItemService.addItemToCart(cart.getId(), productId, quantity);
             return ResponseEntity.ok(new ApiResponse("Add item successfully", null));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));

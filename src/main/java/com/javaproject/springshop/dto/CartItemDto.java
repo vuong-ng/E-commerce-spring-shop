@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 
 import com.javaproject.springshop.model.Product;
 
+import lombok.Data;
+
+@Data
 public class CartItemDto {
     private Long itemId;
     private int quantity;

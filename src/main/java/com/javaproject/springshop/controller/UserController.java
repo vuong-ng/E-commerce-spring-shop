@@ -33,7 +33,9 @@ public class UserController {
     @GetMapping("/{userId}/user")
     public ResponseEntity<ApiResponse> getUserId(@PathVariable Long userId) {
         try {
+            System.out.println("here");
             User user = userService.getUserById(userId);
+            System.out.println(user.getCart());
             UserDto userDto = userService.convertUserToDto(user);
             return ResponseEntity.ok(new ApiResponse("Get user success", userDto));
         } catch (ResourceNotFoundException e) {
