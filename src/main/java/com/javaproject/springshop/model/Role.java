@@ -1,12 +1,9 @@
  package com.javaproject.springshop.model;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.stream.Stream;
 
-import org.hibernate.annotations.ManyToAny;
-
-import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,4 +29,8 @@ public class Role {
 
     @ManyToMany(mappedBy = "roles")
     Collection<User> users = new HashSet<>();
+
+    public Stream<String> isEmpty() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

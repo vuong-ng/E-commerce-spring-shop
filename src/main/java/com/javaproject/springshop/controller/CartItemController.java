@@ -1,8 +1,10 @@
 package com.javaproject.springshop.controller;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
-
+import org.apache.tomcat.util.file.ConfigurationSource.Resource;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,13 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.javaproject.springshop.exceptions.ResourceNotFoundException;
 import com.javaproject.springshop.model.Cart;
 import com.javaproject.springshop.model.User;
 import com.javaproject.springshop.response.ApiResponse;
 import com.javaproject.springshop.service.cart.ICartItemService;
 import com.javaproject.springshop.service.cart.ICartService;
 import com.javaproject.springshop.service.user.IUserService;
+import io.jsonwebtoken.JwtException;
 
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -32,14 +37,16 @@ public class CartItemController {
     public ResponseEntity<ApiResponse> addItem(
             @RequestParam Long productId, @RequestParam Integer quantity) {
         try {
-            User user = userService.getUserById(4L);
+            User user = userService.getAuthenticatedUser();
             Cart cart = cartService.initializeNewCart(user);
             System.out.println(cart.getId() + " " + cart.getUser().getId());
 
             cartItemService.addItemToCart(cart.getId(), productId, quantity);
             return ResponseEntity.ok(new ApiResponse("Add item successfully", null));
-        } catch (Exception e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        } catch (JwtException e) {
+            return ResponseEntity.status(UNAUTHORIZED).body(new ApiResponse(e.getMessage(), null));
         }
     }
     
