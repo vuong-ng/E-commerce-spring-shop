@@ -15,10 +15,6 @@ A comprehensive Java-based e-commerce backend system supporting multi-role user 
 - [User Roles](#user-roles)
 - [Database Schema](#database-schema)
 - [Security](#security)
-- [Testing](#testing)
-- [Deployment](#deployment)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Overview
 
