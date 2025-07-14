@@ -53,7 +53,7 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
     private void createDefaultAdminIfNotExists() {
 
         Role adminRole = roleRepository.findByName("ROLE_ADMIN").get();
-        for (int i = 1; i <= 2; i++) {
+        for (int i = 5; i <= 7; i++) {
             String defaultEmail = "admin" + i + "@gmail.com";
             if (userRepository.existsByEmail(defaultEmail)) {
                 continue;
@@ -62,7 +62,7 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
             user.setFirstname("Admin");
             user.setLastname("Admin" + i);
             user.setEmail(defaultEmail);
-            user.setPassword(passwordEncoder.encode((passwordEncoder.encode("123456"))));
+            user.setPassword((passwordEncoder.encode("1234555877777")));
             user.setRoles(Set.of(adminRole));
             userRepository.save(user);
             System.out.println("Default admin user" + " created seccessfully");

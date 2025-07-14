@@ -36,12 +36,15 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest request) {
         try {
+            System.out.println("print login request : "+request.getEmail());
             Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(
-                    request.getEmail(), request.getPassword()));
+                            request.getEmail(), request.getPassword()));
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateTokenForUser(authentication);
         ShopUserDetails userDetails = (ShopUserDetails) authentication.getPrincipal();
+        System.out.println(userDetails.getEmail());
         JwtResponse jwtResponse = new JwtResponse(userDetails.getId(), jwt);
         return ResponseEntity.ok(new ApiResponse("Login successful", jwtResponse));
     } catch (AuthenticationException e) {
