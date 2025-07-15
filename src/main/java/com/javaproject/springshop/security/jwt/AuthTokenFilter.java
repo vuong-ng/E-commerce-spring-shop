@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.javaproject.springshop.security.user.ShopUserDetailsService;
+import com.javaproject.springshop.service.blacklist.ITokenBlackListService;
 
 import io.jsonwebtoken.JwtException;
 import io.micrometer.common.lang.NonNull;
@@ -26,12 +27,15 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private ShopUserDetailsService shopUserDetailsService;
 
+    @Autowired
+    private ITokenBlackListService tokenBlacklist;
+
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
         try {
             String jwt = parseJwt(request);
-            if (StringUtils.hasText(jwt) && jwtUtils.validateToken(jwt)) {
+            if (StringUtils.hasText(jwt) && jwtUtils.validateToken(jwt) && !tokenBlacklist.isBlacklisted(jwt)) {
                 String username = jwtUtils.getUsernameFromToken(jwt);
                 UserDetails userDetails = shopUserDetailsService.loadUserByUsername(username);
                 var auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -46,7 +50,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             response.getWriter().write(e.getMessage());
             return;
         }
-        filterChain.doFilter(request, response);
 
     }
 
