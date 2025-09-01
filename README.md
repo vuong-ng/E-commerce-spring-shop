@@ -18,7 +18,7 @@ A comprehensive Java-based e-commerce backend system supporting multi-role user 
 
 ## Overview
 
-This e-commerce backend provides a robust foundation for online marketplace applications. It implements a multi-tenant architecture supporting different user roles with appropriate permissions, secure transaction processing, and comprehensive product management capabilities.
+This e-commerce backend provides a system for online marketplace. It implements a multi-tenant architecture supporting different user roles with appropriate permissions, secure transaction processing, comprehensive product management capabilities, and other advanced features such as Coupons and Sales.
 
 ## Features
 
@@ -28,6 +28,7 @@ This e-commerce backend provides a robust foundation for online marketplace appl
 - **Order Processing**: Complete order lifecycle from cart to fulfillment
 - **Payment Integration**: Secure payment processing and transaction management
 - **Multi-Role Support**: Buyer, Seller, and Admin role-based access control
+- **Promotions & Discounts**: Implements coupons, sales, and promotional pricing strategies.
 
 ## Architecture
 
